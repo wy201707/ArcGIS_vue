@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Inture Layer</title>
+        <link rel="stylesheet" href="https://js.arcgis.com/4.9/esri/css/main.css">
+        <script src="https://js.arcgis.com/4.9/"></script>
+        <style type="text/css">
+        #viewDiv{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="viewDiv"></div>
+        <script>
+        require([
+            "esri/Map",
+            "esri/views/SceneView",
+            "esri/layers/TileLayer",
+        ],function (Map,SceneView,TileLayer) {
+            //创建切片图层
+            var tileLayer01=new TileLayer({
+                url:"https://xqwportal.arcgis.cn/arcgis/rest/services/ServerXzqhGloble02/MapServer",
+                id:"demodata01",
+                opacity:0.7
+            });
+ 
+            //创建地图
+            var map=new Map({
+                basemap:"osm",
+                //layers:[tileLayer01]
+            });
+ 
+            //切片图层添加至底图
+            map.add(tileLayer01);
+ 
+            //创建视角
+            var view=new SceneView({
+                container:"viewDiv",
+                map:map
+            });
+ 
+            //视图缩放至业务图层
+            view.when(function () {
+                tileLayer01.when(function () {
+                    view.goTo(tileLayer01.fullExtent);
+                });
+           });
+        });
+    </script>
+    </body>
+</html>
