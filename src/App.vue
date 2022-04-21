@@ -65,12 +65,10 @@ export default {
 </script>
 
 <style>
-  body{
-    margin: 0;
-  }
-#sceneview{
-  position: absolute;
+  html,body,#sceneview{
+  position: relative;
   width:100%;
   height: 100%;
+  margin: 0;
 }
 </style>
