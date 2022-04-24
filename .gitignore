@@ -2,8 +2,10 @@
 node_modules
 /dist
 
+
 # 这个就不上传了
 App原.vue
+/waste
 
 # local env files
 .env.local
