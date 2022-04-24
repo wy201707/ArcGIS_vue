@@ -5,20 +5,20 @@
             <el-container class="app-content-pannel">
                 <el-aside width="200px" h>左键菜单</el-aside>
                 <!--原： <el-aside width="200px" h> 这里h是什么意思？  -->
-                <el-main>地图区域</el-main>
+                <el-main class="sys-content">
+                    <MapView />
+                </el-main>
             </el-container>
         </el-container>
     </div>
 </template>
 
 <script>
-// import { loadModules } from 'esri-loader';
-// import {loadScript, loadCss, loadModules} from 'esri-loader'
-// import * as esriLoader from "esri-loader";
+import MapView from './components/MapView';
 
 export default {
     name: 'App',
-    components: {},
+    components: { MapView },
     methods: {},
 };
 </script>
@@ -54,7 +54,7 @@ body,
     background-color: #e9eef3;
     color: #333;
     text-align: center;
-    line-height: 180px;
+    /* line-height: 180px; */
 }
 
 body > .el-container {
@@ -65,6 +65,11 @@ body > .el-container {
 }
 .app-content-pannel {
     height: 100%;
+}
+
+.sys-content {
+    padding: 5px !important;
+    /* ! important提高权重值。不然的话，权重干不过el-main（padding=20px太宽了不好看），会导致配置无效*/
 }
 /* .OutPannel,
 .ContentPannel {
