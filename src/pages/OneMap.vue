@@ -2,6 +2,7 @@
     <div class="onemap-page">
         <MapView />
         <MapTools />
+        <MapTree />
     </div>
 </template>
 
@@ -9,9 +10,10 @@
 // import MapView from './../components/MapView';
 import MapView from '../components/MapView';
 import MapTools from '../components/MapTools';
+import MapTree from '../components/MapTree';
 export default {
     name: 'OneMap',
-    components: { MapView, MapTools },
+    components: { MapView, MapTools, MapTree },
     methods: {},
 };
 </script>
