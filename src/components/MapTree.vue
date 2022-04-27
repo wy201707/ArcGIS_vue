@@ -46,10 +46,27 @@ export default {
                             ],
                         },
                         {
-                            label: '二级 2-2',
+                            label: '行政区划',
                             children: [
                                 {
-                                    label: '三级 2-2-1',
+                                    label: '省数据',
+                                    layerid: 'layerid',
+                                    // 我的数据：第一份编码格式有问题不是按照省级号码进行编码，第二份缺少县级数据
+                                    // 妈的，纠结这么久。直接用老师发布的服务不就好了
+                                    // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/XZQHProvince2_Project/FeatureServer',
+                                    layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
+                                },
+                                {
+                                    label: '市数据',
+                                    layerid: 'layerid',
+                                    // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
+                                    layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
+                                },
+                                {
+                                    label: '县数据',
+                                    layerid: 'layerid',
+                                    // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty2_WebMokatuo/FeatureServer',
+                                    layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer',
                                 },
                             ],
                         },
