@@ -201,8 +201,8 @@ export default {
                 queryprefix = 'code';
             }
 
-            const [QueryTask, Query, Graphic] = await loadModules(
-                ['esri/tasks/QueryTask', 'esri/tasks/support/Query', 'esri/Graphic'],
+            const [QueryTask, Query, Graphic, Polyline] = await loadModules(
+                ['esri/tasks/QueryTask', 'esri/tasks/support/Query', 'esri/Graphic', 'esri/geometry/Polyline'],
                 config.options,
             );
             const queryTask = new QueryTask({
@@ -215,41 +215,77 @@ export default {
             let results = await queryTask.execute(query);
 
             //渲染和定位
-            const featuresResult = results.features[0];
+            const featuresResult = results.features[0]; //
             if (graphic) {
                 view.graphics.remove(graphic);
             }
-            const fillSymbol = {
+            /*             const fillSymbol = {
                 type: 'simple-fill',
                 color: [188, 240, 234, 0.1], //0.1是透明度
                 outline: {
                     color: '#00FFFF',
                     width: 2,
                 }, //这是外边界
+            }; */
+            const fillSymbol = {
+                type: 'simple-fill',
+                color: [188, 240, 234, 0.1],
+                outline: {
+                    color: '#00FFFF',
+                    width: 2,
+                },
             };
             //实例化和添加行政区划的边界（高亮）
-            console.log('results.features.geometry', results.features.geometry);
+            console.log('results.features', results.features);
             console.log('results.features[0].geometry', featuresResult.geometry);
+            graphic = await new Graphic({
+                geometry: featuresResult.geometry,
+                symbol: fillSymbol,
+            });
+            console.log(graphic);
+            console.log(typeof graphic);
             try {
-                graphic = await new Graphic({
-                    geometry: featuresResult.geometry,
-                    symbol: fillSymbol,
-                });
-
+                view.graphics.add(graphic);
                 console.log('try graphic', graphic);
             } catch (err) {
                 this.$message.error(err.message);
                 console.log(err);
             }
-            view.graphics.add(graphic);
-            //（地图中心的）跳转
+
+            /*             //（地图中心的）跳转
             view.goTo({
                 center: [
                     featuresResult.geometry.extent.center.longitude,
                     featuresResult.geometry.extent.center.latitude,
                 ],
                 zoom: 8, //缩放程度设为8级
+            }); */
+            var polyline = new Polyline(featuresResult.geometry.rings);
+            /*可以绘制  
+           const polyline = {
+                type: 'polyline', // autocasts as new Polyline()
+                paths: [
+                    [117, 23],
+                    [118, 25],
+                    [119, 24],
+                    [117, 23],
+                ],
+            }; */
+
+            // Create a symbol for drawing the line
+            const lineSymbol = {
+                type: 'simple-fill',
+                color: [188, 240, 234, 0.1],
+                outline: {
+                    color: '#00FFFF',
+                    width: 2,
+                },
+            };
+            var graphic2 = await new Graphic({
+                geometry: polyline,
+                symbol: lineSymbol,
             });
+            view.graphics.add(graphic2);
         },
 
         closeXZQHPannel() {
