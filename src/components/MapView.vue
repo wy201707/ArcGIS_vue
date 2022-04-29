@@ -78,7 +78,7 @@ export default {
             });
             mapView.ui.add(scaleBar);
 
-            //添加缩放
+            //添加缩放控件
             const zoom = new Zoom({
                 view: mapView,
                 container: 'zoom',

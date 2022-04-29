@@ -12,16 +12,25 @@
 export default {
     name: 'MapTools',
     methods: {
-        handleMapToolsitemClick(e) {
-            console.log('maptools', e.target.id);
+        goMapTree() {
             const currentVisible = this.$store.getters._getdefaultMapTreeVisible;
             console.log('cur v=', currentVisible);
+            this.$store.commit('_setDefaultMapTreeVisible', !currentVisible);
+        },
+        goXZQH() {
+            const curVisible = this.$store.getters._getDefaultXZQHVisible;
+            console.log('cur v=', curVisible);
+            this.$store.commit('_setDefaultXZQHVisible', !curVisible);
+        },
+        handleMapToolsitemClick(e) {
+            console.log('maptools', e.target.id);
             switch (e.target.id) {
                 case 'xzdh':
-                    console.log('xzdh');
+                    // console.log('xzdh');
+                    this.goXZQH();
                     break;
                 case 'maptree':
-                    this.$store.commit('_setDefaultMapTreeVisible', !currentVisible);
+                    this.goMapTree();
                     break;
                 case 'distance':
                     break;
