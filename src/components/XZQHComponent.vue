@@ -186,7 +186,7 @@ export default {
             let code = '';
 
             const view = this.$store.getters._getDefaultView;
-            // console.log(view);
+            console.log(val, type);
             let queryprefix = '';
             // 改这里，分市用截图那个服务，分县用原本分县的那个服务（不要过i分兴奋，第二个服务地理信息够用嘛？）
             if (type === 'city') {
@@ -201,8 +201,8 @@ export default {
                 queryprefix = 'code';
             }
 
-            const [QueryTask, Query, Graphic, Polyline] = await loadModules(
-                ['esri/tasks/QueryTask', 'esri/tasks/support/Query', 'esri/Graphic', 'esri/geometry/Polyline'],
+            const [QueryTask, Query, Graphic] = await loadModules(
+                ['esri/tasks/QueryTask', 'esri/tasks/support/Query', 'esri/Graphic'],
                 config.options,
             );
             const queryTask = new QueryTask({
@@ -211,22 +211,15 @@ export default {
             let query = new Query();
             query.returnGeometry = true;
             query.outFields = ['*'];
-            query.where = queryprefix + " = '" + code + "'";
+            query.where = queryprefix + " = '" + code + "'"; //真的是数据的问题,XXXX
             let results = await queryTask.execute(query);
 
             //渲染和定位
-            const featuresResult = results.features[0];
+            const featuresResult = results.features[0]; //好像因为返回的是集合
             if (graphic) {
                 view.graphics.remove(graphic);
             }
-            /*             const fillSymbol = {
-                type: 'simple-fill',
-                color: [188, 240, 234, 0.1], //0.1是透明度
-                outline: {
-                    color: '#00FFFF',
-                    width: 2,
-                }, //这是外边界
-            }; */
+
             const fillSymbol = {
                 type: 'simple-fill',
                 color: [188, 240, 234, 0.1],
@@ -236,57 +229,20 @@ export default {
                 },
             };
             //实例化和添加行政区划的边界（高亮）
-            console.log('results.features', results.features);
-            console.log('results.features[0].geometry', featuresResult.geometry);
             graphic = await new Graphic({
                 geometry: featuresResult.geometry,
                 symbol: fillSymbol,
             });
-            console.log(graphic);
-            console.log(typeof graphic);
-            try {
-                view.graphics.add(graphic);
-                console.log('try graphic', graphic);
-            } catch (err) {
-                this.$message.error(err.message);
-                console.log(err);
-            }
-
-            /*             //（地图中心的）跳转
+            view.graphics.add(graphic);
+            console.log(featuresResult.geometry.extent);
+            // console.log(featuresResult.geometry.extent.center.x);
+            // console.log(featuresResult.geometry.getCentroid());  //没这两个函数
+            // console.log(featuresResult.geometry.getExtent().getCenter());
+            //（地图中心的）跳转
             view.goTo({
-                center: [
-                    featuresResult.geometry.extent.center.longitude,
-                    featuresResult.geometry.extent.center.latitude,
-                ],
+                center: [featuresResult.geometry.extent.center.x, featuresResult.geometry.extent.center.y],
                 zoom: 8, //缩放程度设为8级
-            }); */
-            var polyline = new Polyline(featuresResult.geometry.rings);
-            /*可以绘制  
-           const polyline = {
-                type: 'polyline', // autocasts as new Polyline()
-                paths: [
-                    [117, 23],
-                    [118, 25],
-                    [119, 24],
-                    [117, 23],
-                ],
-            }; */
-
-            // Create a symbol for drawing the line
-            const lineSymbol = {
-                type: 'simple-fill',
-                color: [188, 240, 234, 0.1],
-                outline: {
-                    color: '#00FFFF',
-                    width: 2,
-                },
-            };
-
-            var graphic2 = await new Graphic({
-                geometry: polyline,
-                symbol: lineSymbol,
             });
-            view.graphics.add(graphic2);
         },
 
         closeXZQHPannel() {
