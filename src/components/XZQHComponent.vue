@@ -190,10 +190,10 @@ export default {
             let queryprefix = '';
             // 改这里，分市用截图那个服务，分县用原本分县的那个服务（不要过i分兴奋，第二个服务地理信息够用嘛？）
             if (type === 'city') {
-                code = val.toString().substring(0, 5);
+                code = val.toString();
                 serverUrl =
                     'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/2XZQH_City_WebMokatuo/FeatureServer/11';
-                queryprefix = 'ADM1_PCODE ';
+                queryprefix = 'ADM2_PCODE ';
             } else if (type === 'county') {
                 code = val.toString().substring(0, 6);
                 serverUrl =
@@ -211,11 +211,11 @@ export default {
             let query = new Query();
             query.returnGeometry = true;
             query.outFields = ['*'];
-            query.where = queryprefix + " like '" + code + "%'";
+            query.where = queryprefix + " = '" + code + "'";
             let results = await queryTask.execute(query);
 
             //渲染和定位
-            const featuresResult = results.features[0]; //
+            const featuresResult = results.features[0];
             if (graphic) {
                 view.graphics.remove(graphic);
             }
@@ -281,6 +281,7 @@ export default {
                     width: 2,
                 },
             };
+
             var graphic2 = await new Graphic({
                 geometry: polyline,
                 symbol: lineSymbol,
