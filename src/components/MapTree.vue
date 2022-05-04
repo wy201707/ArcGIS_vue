@@ -52,21 +52,34 @@ export default {
                             // 他的失效了。。。
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/XZQHProvince2_Project/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_Province_WebMokatuo/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_Province_WebMokatuo/FeatureServer',
+                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/Province_2020/FeatureServer',
                         },
                         {
                             label: '市数据',
                             layerid: 'layerid',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_City_WebMokatuo/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_City_WebMokatuo/FeatureServer',
+                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/City_2020/FeatureServer',
                         },
                         {
                             label: '县数据',
                             layerid: 'layerid',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty2_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty4_WebMokatuo/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty4_WebMokatuo/FeatureServer',
+                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer',
+                        },
+                    ],
+                },
+                {
+                    label: '业务数据',
+                    children: [
+                        {
+                            label: '火车站数据',
+                            layerid: 'layerid',
+                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/diandianGIS/FeatureServer',
                         },
                     ],
                 },

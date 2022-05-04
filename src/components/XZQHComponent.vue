@@ -72,9 +72,7 @@ export default {
                 config.options,
             );
             const queryTask = new QueryTask({
-                // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer/0',
-                // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer/1',
-                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_Province_WebMokatuo/FeatureServer/10',
+                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/Province_2020/FeatureServer/6',
             });
 
             //实例化Query（不需要传参数），但是要指定以下三个属性的值
@@ -119,7 +117,7 @@ export default {
 
             // 查找市级数据
             const queryTask = new QueryTask({
-                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/2XZQH_City_WebMokatuo/FeatureServer/11',
+                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/City_2020/FeatureServer/1',
             });
             let query = new Query();
             query.returnGeometry = false;
@@ -144,8 +142,7 @@ export default {
                     currentCityData.map(async (item2) => {
                         const cityCode = item2.value.toString().substring(3, 7);
                         const queryTask2 = new QueryTask({
-                            // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer/0',
-                            url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty4_WebMokatuo/FeatureServer/2',
+                            url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer/7',
                         });
                         // console.log(cityCode);
                         let query2 = new Query();
@@ -154,18 +151,7 @@ export default {
                         query2.where = "code like '" + cityCode + "%'";
 
                         const result2 = await queryTask2.execute(query2);
-                        /*                         let currentCountyData = [];
-                        if (result2.length > 0) {
-                            result2.features.map((item2) => {
-                                currentCountyData.push({
-                                    value: item2.attributes.code,
-                                    label: item2.attributes.name,
-                                });
-                            });
-                        }
 
-                        console.log(currentCountyData);
-                        item2.children = currentCityData; */
                         item2.children = result2.features;
                         // console.log('item2 child:', item2.children);
                         return item2;
@@ -192,12 +178,12 @@ export default {
             if (type === 'city') {
                 code = val.toString();
                 serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/2XZQH_City_WebMokatuo/FeatureServer/11';
+                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/City_2020/FeatureServer/1';
                 queryprefix = 'ADM2_PCODE ';
             } else if (type === 'county') {
                 code = val.toString().substring(0, 6);
                 serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty4_WebMokatuo/FeatureServer/2';
+                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer/7';
                 queryprefix = 'code';
             }
 
@@ -235,12 +221,10 @@ export default {
             });
             view.graphics.add(graphic);
             console.log(featuresResult.geometry.extent);
-            // console.log(featuresResult.geometry.extent.center.x);
-            // console.log(featuresResult.geometry.getCentroid());  //没这两个函数
-            // console.log(featuresResult.geometry.getExtent().getCenter());
+
             //（地图中心的）跳转
             view.goTo({
-                center: [featuresResult.geometry.extent.center.x, featuresResult.geometry.extent.center.y],
+                center: [featuresResult.center_x, featuresResult.geometry.center_y],
                 zoom: 8, //缩放程度设为8级
             });
         },
