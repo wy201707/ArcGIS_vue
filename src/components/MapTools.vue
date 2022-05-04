@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { loadModules } from 'esri-loader';
+import config from './config';
 export default {
     name: 'MapTools',
     methods: {
@@ -57,6 +59,7 @@ export default {
                 case 'area':
                     break;
                 case 'spacequery':
+                    this.initSpaceQuery();
                     break;
                 case 'morescreen':
                     break;
@@ -65,6 +68,15 @@ export default {
                 default:
                     break;
             }
+        },
+        async initSpaceQuery() {
+            const _self = this;
+            const view = _self.$store.getters._getDefaultView;
+            // 1.绘制面状区域
+            const [] = await loadModules(
+                ['esri/widgets/Sketch/SketchViewModel', 'esri/Graphic', 'esri/layers/GraphicLayer'],
+                config.options,
+            );
         },
     },
 };

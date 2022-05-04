@@ -220,11 +220,11 @@ export default {
                 symbol: fillSymbol,
             });
             view.graphics.add(graphic);
-            console.log(featuresResult.geometry.extent);
+            // console.log(featuresResult.attributes);
 
-            //（地图中心的）跳转
+            //（地图中心的）跳转终于实现了。。。。
             view.goTo({
-                center: [featuresResult.center_x, featuresResult.geometry.center_y],
+                center: [featuresResult.attributes.center_x, featuresResult.attributes.center_y],
                 zoom: 8, //缩放程度设为8级
             });
         },
