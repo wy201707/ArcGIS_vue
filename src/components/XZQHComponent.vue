@@ -186,14 +186,14 @@ export default {
             let code = '';
 
             const view = this.$store.getters._getDefaultView;
-            // console.log(view);
+            console.log(val, type);
             let queryprefix = '';
             // 改这里，分市用截图那个服务，分县用原本分县的那个服务（不要过i分兴奋，第二个服务地理信息够用嘛？）
             if (type === 'city') {
-                code = val.toString().substring(0, 5);
+                code = val.toString();
                 serverUrl =
                     'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/2XZQH_City_WebMokatuo/FeatureServer/11';
-                queryprefix = 'ADM1_PCODE ';
+                queryprefix = 'ADM2_PCODE ';
             } else if (type === 'county') {
                 code = val.toString().substring(0, 6);
                 serverUrl =
@@ -211,43 +211,36 @@ export default {
             let query = new Query();
             query.returnGeometry = true;
             query.outFields = ['*'];
-            query.where = queryprefix + " like '" + code + "%'";
+            query.where = queryprefix + " = '" + code + "'"; //真的是数据的问题,XXXX
             let results = await queryTask.execute(query);
 
             //渲染和定位
-            const featuresResult = results.features[0];
+            const featuresResult = results.features[0]; //好像因为返回的是集合
             if (graphic) {
                 view.graphics.remove(graphic);
             }
+
             const fillSymbol = {
                 type: 'simple-fill',
-                color: [188, 240, 234, 0.1], //0.1是透明度
+                color: [188, 240, 234, 0.1],
                 outline: {
                     color: '#00FFFF',
                     width: 2,
-                }, //这是外边界
+                },
             };
             //实例化和添加行政区划的边界（高亮）
-            console.log('results.features.geometry', results.features.geometry);
-            console.log('results.features[0].geometry', featuresResult.geometry);
-            try {
-                graphic = await new Graphic({
-                    geometry: featuresResult.geometry,
-                    symbol: fillSymbol,
-                });
-
-                console.log('try graphic', graphic);
-            } catch (err) {
-                this.$message.error(err.message);
-                console.log(err);
-            }
+            graphic = await new Graphic({
+                geometry: featuresResult.geometry,
+                symbol: fillSymbol,
+            });
             view.graphics.add(graphic);
+            console.log(featuresResult.geometry.extent);
+            // console.log(featuresResult.geometry.extent.center.x);
+            // console.log(featuresResult.geometry.getCentroid());  //没这两个函数
+            // console.log(featuresResult.geometry.getExtent().getCenter());
             //（地图中心的）跳转
             view.goTo({
-                center: [
-                    featuresResult.geometry.extent.center.longitude,
-                    featuresResult.geometry.extent.center.latitude,
-                ],
+                center: [featuresResult.geometry.extent.center.x, featuresResult.geometry.extent.center.y],
                 zoom: 8, //缩放程度设为8级
             });
         },
