@@ -4,8 +4,8 @@ const config = {
         css: 'https://js.arcgis.com/4.18/esri/themes/light/main.css',
     }, */
      options : {
-        url: 'https://js.arcgis.com/4.23/',
-        css: 'https://js.arcgis.com/4.23/esri/themes/light/main.css',
+        url: 'https://js.arcgis.com/4.18/',
+        css: 'https://js.arcgis.com/4.18/esri/themes/light/main.css',
     },
     centerPoints:[
          {
@@ -21,7 +21,8 @@ const config = {
         {
             'HanZhong':[107.03194, 33.06784]
         }
-    ]
+    ],
+    devtool: 'source-map',
        
         
     

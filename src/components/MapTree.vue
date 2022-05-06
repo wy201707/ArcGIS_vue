@@ -79,7 +79,8 @@ export default {
                         {
                             label: '火车站数据',
                             layerid: 'layerid',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/diandianGIS/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/diandianGIS/FeatureServer',
+                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/StationPoint/FeatureServer',
                         },
                     ],
                 },

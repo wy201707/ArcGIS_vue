@@ -4,6 +4,7 @@
         <MapTools />
         <MapTree />
         <XZQHComponent />
+        <ResultTable />
     </div>
 </template>
 
@@ -13,9 +14,10 @@ import MapView from '../components/MapView';
 import MapTools from '../components/MapTools';
 import MapTree from '../components/MapTree';
 import XZQHComponent from './../components/XZQHComponent';
+import ResultTable from './../components/ResultTable';
 export default {
     name: 'OneMap',
-    components: { MapView, MapTools, MapTree, XZQHComponent },
+    components: { MapView, MapTools, MapTree, XZQHComponent, ResultTable },
     methods: {},
 };
 </script>
