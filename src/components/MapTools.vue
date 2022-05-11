@@ -143,19 +143,17 @@ export default {
                 return;
             }
             const queryPoint = resultLayer.createQuery(); //实例化query
-            debugger;
-            queryPoint.geometry = graphic.geometry; //赋值操作，query与业务图层绑定
+            /***&*/ queryPoint.geometry = graphic.geometry; //赋值操作，query与业务图层绑定
             resultLayer
                 .queryFeatures(queryPoint)
                 .then(function (results) {
                     let currentData = [];
-                    debugger;
-                    if (results.features.length > 0) {
+                    /***&*/ if (results.features.length > 0) {
                         // 符号化渲染、实例化弹窗
                         _self.renderResultLayer(results.features);
                         // 符号化渲染的同时，对查询结果使用表格进行展示
-                        debugger;
-                        results.features.map((item, index) => {
+                        // console.log('renderResultLayer之后，_self=', _self); //不是什么promise中的this指针调用问题
+                        /***&*/ results.features.map((item, index) => {
                             currentData.push({
                                 name: item.attributes.name,
                                 type: item.attributes.sType,
@@ -166,7 +164,7 @@ export default {
                                 key: index,
                             });
                         });
-                        debugger;
+                        /***&*/
                     } else {
                         currentData.length = 0;
                     }
@@ -176,26 +174,30 @@ export default {
                         type: 'success',
                     });
                     _self.$store.commit('_setDefaultQueryResult', currentData);
-                    debugger;
-                    _self.$store.commit('_setDefaultQueryResultVisible', true);
+                    /***&*/ _self.$store.commit('_setDefaultQueryResultVisible', true);
                 })
                 .catch(function (error) {
                     console.log(error);
                     _self.$message.error('空间查询失败，请联系管理员');
                 });
+            /* 补充：考点Promise的执行顺序，当前脚本调用了Promise.then()，是当前脚本全部执行完，才执行.then中的语句
             console.log(_self);
-            debugger;
             console.log(this.$store.getters._getDefaultQueryResultVisible);
-            console.log(this.$store.getters._getDefaultQueryResult);
+            console.log(this.$store.getters._getDefaultQueryResult); */
         },
         async renderResultLayer(resultFeatures) {
             const view = this.$store.getters._getDefaultView;
-            const [FeatureLayer] = await loadModules('esri/layers/FeatureLayer', config.options);
-
+            const [FeatureLayer] = await loadModules(['esri/layers/FeatureLayer'], config.options);
+            // 好家伙，竟然是这个卡住了：loadModules(['esri/layers/FeatureLayer'], config.options);第一项参数必须加[]！！！!!!
             const resultLayer = view.map.findLayerById('initResultLayer');
-            if (resultLayer) view.map.remove(resultLayer);
-            debugger;
-            const resultData = this._translateLonLat(resultFeatures); //转换函数，将查询返回的数据变成自己定义的数据格式           //拼接source所需字符串
+            if (resultLayer) {
+                console.log('有过图层');
+                view.map.remove(resultLayer);
+            } else {
+                console.log('没有图层');
+            }
+
+            /***&*/ const resultData = this._translateLonLat(resultFeatures); //转换函数，将查询返回的数据变成自己定义的数据格式           //拼接source所需字符串
             //实例化弹窗
             let template = {
                 title: '{name}-{tieluju}',
@@ -205,26 +207,29 @@ export default {
                         fieldInfos: [
                             {
                                 fieldName: 'name',
-                                label: '名称',
+                                // label: '名称',
+                                label: 'name',
                             },
                             {
                                 fieldName: 'type',
-                                label: '类型',
+                                // label: '类型',
+                                label: 'Type',
                             },
                             {
                                 fieldName: 'tieluju',
-                                label: '铁路局',
+                                // label: '铁路局',
+                                label: 'TieLuJu',
                             },
                             {
                                 fieldName: 'address',
-                                label: '地址',
+                                // label: '地址',
+                                label: 'Address',
                             },
                         ],
                     },
                 ],
             };
-            debugger;
-            const queryResultLayer = new FeatureLayer({
+            /***&*/ const queryResultLayer = new FeatureLayer({
                 source: resultData,
                 id: 'initResultLayer',
                 objectIdField: 'ObjectID',
@@ -232,7 +237,8 @@ export default {
                     type: 'simple', //内置
                     symbol: {
                         type: 'picture-marker', //使用图片渲染
-                        url: `static/icon/train.png`,
+                        url: `static/icon/train.jpg`,
+                        // 原来static文件夹要放在public文件夹下
                         width: '32px',
                         height: '32px',
                     },
@@ -261,16 +267,14 @@ export default {
                 ],
                 popupTemplate: template,
             });
-            debugger;
-            view.map.add(queryResultLayer);
-            debugger;
-            console.log('现在在renderResultLayer最后一行,this=', this);
+            /***&*/ view.map.add(queryResultLayer);
+            /***&*/ console.log('现在在renderResultLayer最后一行');
         },
 
         _translateLonLat(data) {
+            // console.log('_translateLonLa,data', data);
             const _self = this;
-            debugger;
-            if (data.length > 0) {
+            /***&*/ if (data.length > 0) {
                 _self.geoData = [];
                 data.map((value, key) => {
                     _self.geoData.push({
@@ -283,7 +287,7 @@ export default {
                         attributes: {
                             ObjectID: key + 1,
                             name: value.attributes.name,
-                            type: value.attributes.type,
+                            type: value.attributes.sType,
                             tieluju: value.attributes.tieluju,
                             address: value.attributes.address,
                         },
@@ -291,8 +295,8 @@ export default {
                     });
                 });
             }
-            debugger;
-            return _self.geoData;
+            // console.log('trans返回的数据：', _self.geoData);
+            /***&*/ return _self.geoData;
         },
     },
 };
