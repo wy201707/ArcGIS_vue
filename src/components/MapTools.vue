@@ -207,23 +207,19 @@ export default {
                         fieldInfos: [
                             {
                                 fieldName: 'name',
-                                // label: '名称',
-                                label: 'name',
+                                label: '名称',
                             },
                             {
                                 fieldName: 'type',
-                                // label: '类型',
-                                label: 'Type',
+                                label: '类型',
                             },
                             {
                                 fieldName: 'tieluju',
-                                // label: '铁路局',
-                                label: 'TieLuJu',
+                                label: '铁路局',
                             },
                             {
                                 fieldName: 'address',
-                                // label: '地址',
-                                label: 'Address',
+                                label: '地址',
                             },
                         ],
                     },
