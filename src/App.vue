@@ -108,4 +108,9 @@ body > .el-container {
 .el-container:nth-child(7) .el-aside {
     line-height: 320px;
 } */
+/* 这（.morescreen-view）也没用上呀？ */
+.morescreen-view {
+    width: 100%;
+    height: 820px;
+}
 </style>
