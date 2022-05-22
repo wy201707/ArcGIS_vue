@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import DataVisual from '../pages/DataVisual'
 import OneMap from '../pages/OneMap'
+import MoreScreen from './../components/MoreScreen'
 
 Vue.use(Router);
 
@@ -19,6 +20,10 @@ export default new Router({
             path: '/onemap',
             component: OneMap
         },
+        {
+            path:'/onemap/one',
+            component:MoreScreen
+        }
     ],
     mode: 'history'
 });
