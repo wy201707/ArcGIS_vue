@@ -84,8 +84,10 @@ export default {
             watchUtils.whenTrue(mapView01, 'stationary', function () {
                 if (mapView01.center) {
                     /* console.log('1', mapView01.center.x, mapView01.center.y);
-                    输出的是屏幕坐标。
-                      // 把屏幕坐标转为经纬度：["esri/views/MapView"]的toMap()  （<===>roScreen）
+                    输出的是投影坐标。
+                    //把投影坐标-->经纬度需要两部
+                    1，投影坐标-->屏幕坐标  toScreen  ["esri/views/MapView"]
+                    2.把屏幕坐标转为经纬度：toMap()  ["esri/views/MapView"]
                     // get the screen point for the specified map point.
                     const mapPoint = {
                         x: mapView01.center.x,
@@ -94,7 +96,7 @@ export default {
                             wkid: 3395,
                         }, */
 
-                    //有经纬度在上边转化半天
+                    //我们现在的返回数据有经纬度在上边转化半天
                     mapView02.goTo({
                         center: [mapView01.center.longitude, mapView01.center.latitude],
                         zoom: mapView01.zoom,

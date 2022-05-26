@@ -15,6 +15,7 @@
                 <el-dropdown-item icon="el-icon-search" command="spacequery">空间查询</el-dropdown-item>
                 <el-dropdown-item icon="el-icon-film" command="morescreen">多屏对比</el-dropdown-item>
                 <el-dropdown-item icon="el-icon-reading" command="swipanalyst">卷帘分析</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-reading" command="printmap">地图打印</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
     </div>
@@ -36,6 +37,17 @@ export default {
             console.log('goXZQH=', curVisible);
             this.$store.commit('_setDefaultXZQHVisible', !curVisible);
         },
+        handleClearMap() {
+            const view = this.$store.getters._getDefaultView;
+            const resultLayer1 = view.map.findLayerById('swipeLayerTop');
+            const resultLayer2 = view.map.findLayerById('swipeLayerBottom');
+            const resultLayer3 = view.map.findLayerById('layerid');
+            if (resultLayer1) view.map.remove(resultLayer1);
+            if (resultLayer2) view.map.remove(resultLayer2);
+            if (resultLayer3) view.map.remove(resultLayer3);
+            if (this.swipe) this.swipe.destroy();
+            if (this.measurementWidget) this.measurementWidget.destroy();
+        },
         handleMapToolsitemClick(e) {
             console.log('maptools:e=', e.target.id);
             switch (e.target.id) {
@@ -47,11 +59,13 @@ export default {
                     this.goMapTree();
                     break;
                 case 'clear':
+                    this.handleClearMap();
                     break;
                 default:
                     break;
             }
         },
+        _initSwipe() {},
         handleCommand(command) {
             switch (command) {
                 case 'distance':
@@ -65,6 +79,7 @@ export default {
                     this.$router.push('/onemap/one');
                     break;
                 case 'swipanalyst':
+                    this._initSwipe();
                     break;
                 default:
                     break;
