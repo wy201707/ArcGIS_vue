@@ -48,11 +48,17 @@ router.get('/get', async (req, res)=> {
 // http://localhost:3001/
 
 router.post('/insert',function(req,res){
-    console.log(req.params.body)
-    sql=`insert into user (name,password,phone,email) values ("wytest","wytest","11","email@com")`
+    console.log(req.body)
+    var name=req.body.name
+    var psd=req.body.psd
+    var phone=req.body.phone
+    var email=req.body.email
+
+    sql=`insert into user (name,password,phone,email) values ("${name}","${psd}","${phone}","${email}")`
+    console.log(sql)
     //!完善：
     //1.之后还要检查号码和email数据
-    //2.主键是什么禁止重复
+    //2.主键是什么禁止重复---phone
     query(sql,(err,result)=>{
         if(!err){
             res.send({
