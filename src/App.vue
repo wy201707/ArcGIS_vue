@@ -1,7 +1,14 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header class="sys-header">一张图项目系统</el-header>
+            <el-header class="sys-header">
+                <span>一张图项目系统</span>
+                <div class="user-info">
+                    <i class="el-icon-user-solid"></i>
+                    <span>当前用户:</span>
+                    <span @click="handleLogin">{{ username }}</span>
+                </div>
+            </el-header>
             <el-container class="app-content-pannel">
                 <el-aside class="sys-menu">
                     <!--原： <el-aside width="200px" h> 这里h是什么意思？  -->
@@ -30,13 +37,33 @@
                 </el-main>
             </el-container>
         </el-container>
+        <el-dialog title="用户登录、注册页面" :visible.sync="loginVisible" width="30%">
+            <div class="login-content">
+                <el-input placeholder="请输入内容" v-model="userNameInput" clearable> </el-input>
+                <el-input placeholder="请输入密码" v-model="userPwdInput" show-password></el-input>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="loginVisible = false">取 消</el-button>
+                <el-button type="primary" @click="userLogin">登录</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+//或者在main.js中引用+vue.use()即可全局使用axios
 export default {
     name: 'App',
     components: {},
+    data() {
+        return {
+            username: '未登录',
+            loginVisible: false,
+            userNameInput: '',
+            userPwdInput: '',
+        };
+    },
     methods: {
         handleMenuSelect(index) {
             if (index === '1') {
@@ -46,6 +73,48 @@ export default {
                 //跳转到一张图
                 this.$router.push('/onemap');
             }
+        },
+        //弹出用户登录页面
+        handleLogin() {
+            this.loginVisible = true;
+        },
+        //用户登录——传到后台
+        userLogin() {
+            const _self = this;
+            const name = this.userNameInput;
+            const psd = this.userPwdInput;
+            // console.log(name, psd);
+            axios
+                .get('http://localhost:3001/user/get', {
+                    params: {
+                        name: name,
+                        password: psd,
+                    },
+                })
+                .then(function (response) {
+                    if (response.data.status === 'success') {
+                        const password = response.data.data[0].password;
+                        // console.log(password, psd);
+                        if (password === psd) {
+                            // console.log('login ok');
+                            _self.$message({
+                                message: '登录成功啦',
+                                type: 'success',
+                            });
+                            _self.loginVisible = false;
+                            _self.username = response.data.data[0].username;
+                        } else {
+                            _self.$message.error('登录失败，用户名或密码错误');
+                            // console.log('fail');
+                        }
+                    }
+
+                    // console.log(response.data.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    _self.loginVisible = false;
+                });
         },
     },
 };
@@ -112,5 +181,15 @@ body > .el-container {
 .morescreen-view {
     width: 100%;
     height: 820px;
+}
+.user-info {
+    font-size: 15px;
+}
+.user-info > span:last-child:hover {
+    color: #409eff;
+    cursor: pointer;
+}
+.login-content {
+    color: #32373e;
 }
 </style>

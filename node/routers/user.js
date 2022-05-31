@@ -21,9 +21,12 @@ router.get('/getAll', async (req, res)=> {
    
 });
 router.get('/get', async (req, res)=> {
-    sql=`select * from user where name="admin"`
+    // console.log(req.query)
+    sql=`select * from user where name="${req.query.name}"`
+    // console.log(sql)
     query(sql,(err,result)=>{
         if(!err){
+            console.log(result)
             res.send({
                 status:'success',
                 data:result
@@ -45,6 +48,7 @@ router.get('/get', async (req, res)=> {
 // http://localhost:3001/
 
 router.post('/insert',function(req,res){
+    console.log(req.params.body)
     sql=`insert into user (name,password,phone,email) values ("wytest","wytest","11","email@com")`
     //!完善：
     //1.之后还要检查号码和email数据
