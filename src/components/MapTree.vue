@@ -80,7 +80,8 @@ export default {
                             label: '火车站数据',
                             layerid: 'layerid',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/diandianGIS/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/StationPoint/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/StationPoint/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/StationGIS/FeatureServer',
                         },
                         {
                             label: '卷帘分析 top',

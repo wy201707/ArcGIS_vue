@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import DataVisual from '../pages/DataVisual'
+// import DataVisual from '../pages/DataVisual'
 import OneMap from '../pages/OneMap'
 import MoreScreen from './../components/MoreScreen'
+import MapDataVisual from './../components/MapDataVisual'
 
 Vue.use(Router);
 
@@ -14,7 +15,8 @@ export default new Router({
     routes: [
         {
             path: '/',
-            component: DataVisual
+            // component: DataVisual
+            component: MapDataVisual
         },
         {
             path: '/onemap',
