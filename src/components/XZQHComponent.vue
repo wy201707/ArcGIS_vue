@@ -72,7 +72,8 @@ export default {
                 config.options,
             );
             const queryTask = new QueryTask({
-                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/Province_2020/FeatureServer/6',
+                // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/Province_2020/FeatureServer/6',
+                url: 'https://services7.arcgis.com/BUin0xjr55RjybAu/ArcGIS/rest/services/Province_new/FeatureServer/6',
             });
 
             //实例化Query（不需要传参数），但是要指定以下三个属性的值
@@ -117,7 +118,8 @@ export default {
 
             // 查找市级数据
             const queryTask = new QueryTask({
-                url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/City_2020/FeatureServer/1',
+                // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/City_2020/FeatureServer/1',
+                url: 'https://services7.arcgis.com/BUin0xjr55RjybAu/ArcGIS/rest/services/City_new/FeatureServer/1',
             });
             let query = new Query();
             query.returnGeometry = false;
@@ -142,7 +144,8 @@ export default {
                     currentCityData.map(async (item2) => {
                         const cityCode = item2.value.toString().substring(3, 7);
                         const queryTask2 = new QueryTask({
-                            url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer/7',
+                            // url: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer/7',
+                            url: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/County_new/FeatureServer/7',
                         });
                         // console.log(cityCode);
                         let query2 = new Query();
@@ -178,12 +181,12 @@ export default {
             if (type === 'city') {
                 code = val.toString();
                 serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/City_2020/FeatureServer/1';
+                    'https://services7.arcgis.com/BUin0xjr55RjybAu/ArcGIS/rest/services/City_new/FeatureServer/1';
                 queryprefix = 'ADM2_PCODE ';
             } else if (type === 'county') {
                 code = val.toString().substring(0, 6);
                 serverUrl =
-                    'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer/7';
+                    'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/County_new/FeatureServer/7';
                 queryprefix = 'code';
             }
 

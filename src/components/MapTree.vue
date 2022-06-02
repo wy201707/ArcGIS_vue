@@ -53,7 +53,9 @@ export default {
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/ArcGIS/rest/services/XZQHProvince2_Project/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_Province_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/Province_2020/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/Province_2020/FeatureServer',
+                            // layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/Province_2020/FeatureServer',//尽自己可见会出问题
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/Province_new/FeatureServer',
                         },
                         {
                             label: '市数据',
@@ -61,7 +63,9 @@ export default {
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/2XZQH_City_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/City_2020/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/City_2020/FeatureServer',
+                            // layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/City_2020/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/City_new/FeatureServer',
                         },
                         {
                             label: '县数据',
@@ -69,7 +73,9 @@ export default {
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty2_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty_WebMokatuo/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCounty4_WebMokatuo/FeatureServer',
-                            layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer',
+                            // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/4XZQH_County/FeatureServer',
+                            // layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/County/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/County_new/FeatureServer',
                         },
                     ],
                 },
@@ -81,19 +87,18 @@ export default {
                             layerid: 'layerid',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/diandianGIS/FeatureServer',
                             // layurl: 'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/StationPoint/FeatureServer',
-                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/StationGIS/FeatureServer',
+                            // layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/StationGIS/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/Station_new/FeatureServer',
                         },
                         {
                             label: '卷帘分析 top',
                             layerid: 'swipeLayerTop',
-                            layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHProvince_WebMokatuo/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/Province_new/FeatureServer',
                         },
                         {
                             label: '卷帘分析 bottom',
                             layerid: 'swipeLayerBottom',
-                            layerurl:
-                                'https://services3.arcgis.com/U26uBjSD32d7xvm2/arcgis/rest/services/XZQHCity_WebMokatuo/FeatureServer',
+                            layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/City_new/FeatureServer',
                         },
                     ],
                 },

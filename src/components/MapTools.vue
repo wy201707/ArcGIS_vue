@@ -18,6 +18,7 @@
                 <el-dropdown-item icon="el-icon-reading" command="printmap">地图打印</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
+        <span class="maptools-item" @click="handleClearMap" id="clear">清屏</span>
     </div>
 </template>
 
@@ -42,6 +43,8 @@ export default {
             const resultLayer1 = view.map.findLayerById('swipeLayerTop');
             const resultLayer2 = view.map.findLayerById('swipeLayerBottom');
             const resultLayer3 = view.map.findLayerById('layerid');
+            const resultLayer4 = view.map.findLayerById('polygonGraphicLayer');
+            if (resultLayer4) view.map.remove(resultLayer4);
             if (resultLayer1) view.map.remove(resultLayer1);
             if (resultLayer2) view.map.remove(resultLayer2);
             if (resultLayer3) view.map.remove(resultLayer3);
@@ -65,12 +68,70 @@ export default {
                     break;
             }
         },
-        _initSwipe() {},
+        async _initSwipe() {
+            const _self = this;
+            const view = _self.$store.getters._getDefaultView;
+            const [Swipe] = await loadModules(['esri/widgets/Swipe'], config.options);
+            const topLayer = view.map.findLayerById('swipeLayerTop');
+            const bottomLayer = view.map.findLayerById('swipeLayerBottom');
+            if (topLayer && bottomLayer) {
+                _self.swipe = new Swipe({
+                    leadingLayers: [topLayer],
+                    trailingLayers: [bottomLayer],
+                    position: 35,
+                    view: view,
+                });
+                view.ui.add(_self.swipe);
+            } else {
+                _self.$message({
+                    message: '请至少添加两层业务图层',
+                    type: 'warning',
+                });
+            }
+        },
+        async PrintMap() {
+            const _self = this;
+            const view = _self.$store.getters._getDefaultView;
+            const [PrintTask, PrintParameters, PrintTemplate] = await loadModules(
+                ['esri/tasks/PrintTask', 'esri/tasks/support/PrintParameters', 'esri/tasks/support/PrintTemplate'],
+                config.options,
+            );
+            let printTask = new PrintTask({
+                url: 'https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task',
+                // url: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/Province_new/FeatureServer',
+            });
+
+            let template = new PrintTemplate({
+                format: 'pdf',
+                exportOptions: {
+                    dpi: 300, //与渲染精度有关
+                },
+                layout: 'a4-portrait',
+                layoutOptions: {
+                    titleText: '打印地图',
+                    authorText: 'wy',
+                    customTextElements: [{ location: '湖北省 武汉' }, { date: '01/06/2022, 21:20:20 AM' }],
+                },
+            });
+
+            let params = new PrintParameters({
+                view: view,
+                template: template,
+            });
+
+            printTask.execute(params).then((printResult, printError) => {
+                console.log(printResult, printError);
+                if (printResult.url) window.open(printResult.url);
+                if (printError) this.$message.error('地图打印失败');
+            });
+        },
         handleCommand(command) {
             switch (command) {
                 case 'distance':
+                    this.initDistanceMap();
                     break;
                 case 'area':
+                    this.initAreaMap();
                     break;
                 case 'spacequery':
                     this.initSpaceQuery();
@@ -81,10 +142,15 @@ export default {
                 case 'swipanalyst':
                     this._initSwipe();
                     break;
+                case 'printmap':
+                    this.PrintMap();
+                    break;
                 default:
                     break;
             }
         },
+        async initDistanceMap() {},
+        async initAreaMap() {},
         async initSpaceQuery() {
             const _self = this;
             const view = _self.$store.getters._getDefaultView;
@@ -318,7 +384,8 @@ export default {
 .maptools-view {
     position: absolute;
     padding: 0 15px;
-    width: 370px;
+    /* width: 370px; */
+    width: 400px;
     height: 30px;
     /* background-color: #67c23a45; */
     background-color: #666e75;
