@@ -270,7 +270,7 @@ export default {
                 });
             }
         },
-        openMapPopup() {
+        async openMapPopup() {
             const _self = this;
             const view = this.$store.getters._getDefaultView;
 
@@ -280,9 +280,8 @@ export default {
                     view.hitTest(event).then(function (response) {
                         console.log('1', response);
                         //所有添加在地图上的图层都会继承这个动作，所以需要选择图层
-                        let graphic = [];
                         if (response.results.length) {
-                            graphic = response.results.filter(function (result) {
+                            let graphic = response.results.filter(function (result) {
                                 return result.graphic.layer.id === 'layerid';
                                 //实际项目中每个图层的layderid都是指定的/有命名规则的，不全是‘layerid:layerid’
                             })[0].graphic;
@@ -396,7 +395,7 @@ export default {
         },
         handleSpaceQuery(graphic) {
             const _self = this;
-            const view = _self.$store.getters._getDefaultView;
+            const view = this.$store.getters._getDefaultView;
             const resultLayer = view.map.findLayerById('layerid');
             //空间查询功能需要和业务图层绑定。第一步查询有没有业务图层（不是还得检查以下是不是业务图层嘛？）
             if (!resultLayer) {
