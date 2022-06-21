@@ -219,7 +219,8 @@ export default {
                         const lengthsParameters = new LengthsParameters();
                         lengthsParameters.polylines = event.graphic.geometry; //要计算其长度的折线数组。
                         lengthsParameters.lengthUnit = 9036; //长度单位:km的代码，m：9001
-                        lengthsParameters.geodesic = true; //线段位于地理坐标系（三维情况按照椭球体距离计算，二维无所谓，就是平面上计算直线距离）：true
+                        lengthsParameters.geodesic = true;
+                        //线段位于地理坐标系（三维情况按照椭球体距离计算，二维无所谓，就是平面上计算直线距离）：true
                         geometryService.lengths(lengthsParameters).then(function (result) {
                             console.log('长度', result);
                         });

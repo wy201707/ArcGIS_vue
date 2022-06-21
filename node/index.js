@@ -4,6 +4,7 @@ var app = express();
 
 var home=require('./routers/home')
 var userRouter = require('./routers/user');  //引入新建的路由文件
+var mapData=require('./routers/mapData')
 //设置跨域访问
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -21,5 +22,6 @@ app.use(bodyParser.json())
 
 app.use('/',home)
 app.use('/user', userRouter);   //配置该文件
+app.use('/mapdata',mapData)
 
 app.listen(3001);

@@ -4,7 +4,9 @@
             <span>图层管理</span>
             <i class="el-icon-close" @click="closeMapTreePannel"></i>
         </div>
-        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+        <!-- <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>  
+            这个defaultProps好像没有用处 试了一下确实可以删除，大约是进化途中的痕迹吧-->
+        <el-tree :data="data" @node-click="handleNodeClick"></el-tree>
     </div>
 </template>
 <!-- <template>
@@ -103,10 +105,10 @@ export default {
                     ],
                 },
             ],
-            defaultProps: {
+            /*             defaultProps: {
                 children: 'children',
                 label: 'label',
-            },
+            }, */
         };
     },
     /*     computed: {

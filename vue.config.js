@@ -9,6 +9,8 @@ module.exports = defineConfig({
 /*   devServer: {
     proxy: 'http://localhost:3001'
   }, */
-  lintOnSave:false //关闭eslint检查
+  lintOnSave:false ,//关闭eslint检查,
+  publicPath:'./'  //配置公共路径
+
 })
 

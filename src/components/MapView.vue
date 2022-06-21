@@ -47,6 +47,7 @@ export default {
                 baseLayers: [
                     new TileLayer({
                         url: 'http://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunity/MapServer',
+                        // url: 'http://map.geoq.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer', //黑蓝配色
                         title: 'Basemap',
                     }),
                 ],
@@ -55,6 +56,7 @@ export default {
             });
             const map = new Map({
                 basemap,
+                // basemap: 'topo-vector',
             });
             const mapView = new MapView({
                 container: 'mapview',
@@ -87,8 +89,8 @@ export default {
                 container: 'zoom',
             });
             mapView.ui.add(this.zoom);
-
-            mapView.ui.components = []; //去掉左上角的缩放图标
+            // console.log('before []', mapView.ui.components);
+            mapView.ui.components = []; //去掉左上角的缩放图标(地图自带的，没办法设置格式和位置)
             this.$store.commit('_setDefaultView', mapView); //设置默认地图
         },
         async _createSceneView() {
@@ -103,7 +105,6 @@ export default {
                 baseLayers: [
                     new TileLayer({
                         url: 'http://map.geoq.cn/arcgis/rest/services/ChinaOnlineCommunity/MapServer',
-                        // url: 'http://map.geoq.cn/arcgis/rest/services/ChinaOnlineStreetPurplishBlue/MapServer', //黑蓝配色
                         title: 'Basemap',
                     }),
                 ],
@@ -113,7 +114,6 @@ export default {
 
             const map = new Map({
                 basemap: basemap,
-                // basemap: 'topo-vector',
             });
 
             //_createSceneView和_createMapView的唯一区别： new SceneView(实例化三维) 和new MapView（实例化二维）

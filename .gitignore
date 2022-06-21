@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/dataProcess
+/example
 temp.vue
 temp.js
 .gitignore
