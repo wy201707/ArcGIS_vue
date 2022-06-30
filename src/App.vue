@@ -68,7 +68,7 @@
 
 <script>
 import axios from 'axios';
-import qs from 'qs';
+import qs from 'qs'; //解析数据
 //或者在main.js中引用+vue.use()即可全局使用axios
 export default {
     name: 'App',

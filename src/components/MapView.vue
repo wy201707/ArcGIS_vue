@@ -115,11 +115,12 @@ export default {
             const map = new Map({
                 basemap: basemap,
             });
-
+            const referenceScale = this.$store.getters._getReferenceScale;
             //_createSceneView和_createMapView的唯一区别： new SceneView(实例化三维) 和new MapView（实例化二维）
             const sceneView = new SceneView({
                 container: 'mapview',
                 map: map,
+                scale: referenceScale * 4,
             });
             setTimeout(() => {
                 sceneView.goTo({

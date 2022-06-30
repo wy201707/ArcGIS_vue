@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 const state = {
- 
+    _referenceScale : 9244650,
     _defaultView: '',       //默认地图view
     _defaultMapTreeVisible: false,       //该数据供maptools控制maptree是否显示，默认false,即maptree某栏不显示
     _defaultXZQHVisible: false, //行政区划面板显示/隐藏
@@ -12,7 +12,9 @@ const state = {
 };
  
 const getters = {
- 
+    _getReferenceScale() {           
+        return state._referenceScale;
+    },
     _getDefaultView() {           
         return state._defaultView;
     },
@@ -32,7 +34,9 @@ const getters = {
 };
  
 const mutations = {
- 
+    _setReferenceScale(state,value) {
+        state._referenceScale = value;
+    },
     _setDefaultView(state,value) {
         state._defaultView = value;
     },

@@ -3,6 +3,7 @@ node_modules
 /dist
 /dataProcess
 /example
+/node/data
 temp.vue
 temp.js
 .gitignore

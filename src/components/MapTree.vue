@@ -22,7 +22,8 @@ import config from './config';
 //     url: 'https://js.arcgis.com/4.23/',
 //     css: 'https://js.arcgis.com/4.23/esri/themes/light/main.css',
 // };
-
+import axios from 'axios';
+// import qs from 'qs';
 export default {
     name: 'MapTree',
     data() {
@@ -102,6 +103,11 @@ export default {
                             layerid: 'swipeLayerBottom',
                             layurl: 'https://services7.arcgis.com/BUin0xjr55RjybAu/arcgis/rest/services/City_new/FeatureServer',
                         },
+                        // {
+                        //     label: 'GeoJSON:ResData2021-09-12-00-10',
+                        //     layerid: 'GeoJSON',
+                        //     layurl: 'http://localhost:80/vuegis/static/data/2021-09-12/GeoData2021-09-12-00-10.json',
+                        // },
                     ],
                 },
             ],
@@ -132,45 +138,131 @@ export default {
 
                 /* const [TileLayer] = await loadModules(['esri/layers/TileLayer'], options);
                 const layer = new TileLayer({ url: data.layurl, id: data.layerid }); */
-                const [TileLayer, FeatureLayer] = await loadModules(
-                    ['esri/layers/TileLayer', 'esri/layers/FeatureLayer'],
-                    config.options,
-                );
-                const c = data.layurl.split('/');
-                const serverType = c[c.length - 1];
-                // console.log(serverType);
-                let layer = '';
-                switch (serverType) {
-                    case 'MapServer':
-                        layer = new TileLayer({ url: data.layurl, id: data.layerid });
-                        break;
-                    case 'FeatureServer':
-                        layer = new FeatureLayer({ url: data.layurl, id: data.layerid });
-                        break;
-                    default:
-                        break;
-                }
+                if (data.layerid == 'GeoJSON') {
+                    const _self = this;
+                    const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer'], config.options);
+                    // 如果GeoJSON文件与你的网站不在同一个域中，则需要启用CORS的服务器或代理。
+                    //可以连接后台获得json数据
+                    /*
+                    axios
+                        .get('http://localhost:3001/mapdata/get', {
+                            params: {
+                                jsonName: 'ResData2021-09-12-00-10',
+                                // jsonName: 'test01',
+                            },
+                        })
+                        .then(function (response) {
+                            console.log('response.data', response.data.JSONData);
 
-                view.map.add(layer);
+                            if (response.data.state === 'success') {
+                                _self.$message({
+                                    message: '读取json成功',
+                                    type: 'success',
+                                });
+                                const blob = new Blob([JSON.stringify(response.data.JSONData)], {
+                                    type: 'application/json',
+                                });
 
-                /*                 // 以下只是为了调整缩放大小
-                console.log(config.centerPoints[2]['HanZhong']);                
+                                // URL reference to the blob
+                                const url = URL.createObjectURL(blob);
+                                const geojsonLayer = new GeoJSONLayer({ url: url });
+                                view.map.add(geojsonLayer);
+                                geojsonLayer.on('update-end', function (e) {
+                                    view.map.setExtent(e.target.extent.expand(1.2));
+                                });
+                            } else {
+                                console.log(response.data.msg);
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            _self.$message({
+                                message: '读取json失败',
+                                type: 'warning',
+                            });
+                            csl;
+                        });*/
+                    // const url = 'http://localhost:80/vuegis/static/data/ResData2021-09-12-00-10.json'; //跨域
+                    // // const file = './../assets/dataTest.json';
+                    // // const file = "./../assets/test01.json";
+                    // // 'D:\\code\\GIS\\js-api\\vue-jspapi\\dataProcess\\JSONData\\ResData2021-09-12-00-10.json';
+                    // // const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';//为啥他就可以
+                    //GeoJSON格式不对v
+                    const renderer = {
+                        type: 'simple',
+                        field: 'mag',
+                        symbol: {
+                            type: 'simple-marker',
+                            color: 'orange',
+                            outline: {
+                                color: 'white',
+                            },
+                        },
+                        visualVariables: [
+                            {
+                                type: 'size',
+                                field: 'mag',
+                                stops: [
+                                    {
+                                        value: 2.5,
+                                        size: '4px',
+                                    },
+                                    {
+                                        value: 8,
+                                        size: '40px',
+                                    },
+                                ],
+                            },
+                        ],
+                    };
+                    const url = 'http://localhost:80/vuegis/static/data/2021-09-12/GeoData2021-09-12-00-10.json';
+                    const geojsonLayer = new GeoJSONLayer({
+                        id: 'GeoJSON',
+                        url: url,
+                    });
+                    view.map.add(geojsonLayer);
+                    geojsonLayer.on('update-end', function (e) {
+                        view.map.setExtent(e.target.extent.expand(1.2));
+                    });
+                } else {
+                    const [TileLayer, FeatureLayer] = await loadModules(
+                        ['esri/layers/TileLayer', 'esri/layers/FeatureLayer'],
+                        config.options,
+                    );
+                    const c = data.layurl.split('/');
+                    const serverType = c[c.length - 1];
+                    // console.log(serverType);
+                    let layer = '';
+                    switch (serverType) {
+                        case 'MapServer':
+                            layer = new TileLayer({ url: data.layurl, id: data.layerid });
+                            break;
+                        case 'FeatureServer':
+                            layer = new FeatureLayer({ url: data.layurl, id: data.layerid });
+                            break;
+                        default:
+                            break;
+                    }
+
+                    view.map.add(layer);
+                    /*                 // 以下只是为了调整缩放大小
+                console.log(config.centerPoints[2]['HanZhong']);
                 view.center = config.centerPoints[2]['HanZhong']; //[107.03194, 33.06784];
                 view.zoom = 4; */
-                // console.log(typeof config);
-                // console.log(typeof config.centerPoints);
-                // console.log(typeof config.centerPoints[2]);
-                /*                 centerPoint = config.centerPoints.forEach((element) => {
+                    // console.log(typeof config);
+                    // console.log(typeof config.centerPoints);
+                    // console.log(typeof config.centerPoints[2]);
+                    /*                 centerPoint = config.centerPoints.forEach((element) => {
                     console.log(element);
                     if (element.addrName == 'Wuhan') {
                         return element.address;
                     }
                 }); */
-                // console.log(centerPoint);
+                    // console.log(centerPoint);
 
-                // view.scale = 200;
-                // console.log(view.spatialReference);
-                /*                 let pt = new Point({
+                    // view.scale = 200;
+                    // console.log(view.spatialReference);
+                    /*                 let pt = new Point({
                     x: config.centerPoint.longitude,
                     y: config.centerPoint.longitude,
                     spatialReference: {
@@ -179,13 +271,14 @@ export default {
                 });
                 console.log(pt); */
 
-                /*  view.goTo({
+                    /*  view.goTo({
                     center: [
                         featuresResult.geometry.extent.center.longitude,
                         featuresResult.geometry.extent.center.latitude,
                     ],
                     zoom: 8, //缩放程度设为8级
                 }); */
+                }
             }
         },
         closeMapTreePannel() {

@@ -2,6 +2,15 @@
     <div class="maptools-view">
         <span class="maptools-item" @click="handleMapToolsitemClick" id="xzqh">行政区导航</span>
         <span class="maptools-item" @click="handleMapToolsitemClick" id="maptree">目录树管理</span>
+        <el-dropdown trigger="click" class="maptools-item" @command="MyhandleCommand">
+            <span class="el-dropdown-link">新增<i class="el-icon-arrow-down el-icon--right"></i> </span>
+            <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-plus" command="showRardaData">显示数据</el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus" command="XXX"></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-plus" command="XXXXX"></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-circle-plus" command="XXXXX"></el-dropdown-item>
+            </el-dropdown-menu>
+        </el-dropdown>
         <el-dropdown trigger="click" class="maptools-item" @command="handleCommand">
             <span class="el-dropdown-link">地图测量<i class="el-icon-arrow-down el-icon--right"></i> </span>
             <el-dropdown-menu slot="dropdown">
@@ -18,7 +27,8 @@
                 <el-dropdown-item icon="el-icon-film" command="morescreen">多屏对比</el-dropdown-item>
                 <el-dropdown-item icon="el-icon-reading" command="swipanalyst">卷帘分析</el-dropdown-item>
                 <el-dropdown-item icon="el-icon-reading" command="printmap">地图打印</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-reading" command="openPopup">开启图层弹窗</el-dropdown-item>
+                <!-- <el-dropdown-item icon="el-icon-reading" command="openPonitPopup">打开所有点的弹窗</el-dropdown-item>① -->
+                <el-dropdown-item icon="el-icon-reading" command="openPopup">打开自定义弹窗</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
         <span class="maptools-item" @click="handleClearMap" id="clear">清屏</span>
@@ -301,6 +311,257 @@ export default {
                 });
             }
         },
+        /*①
+        openPointJSONPopup() {
+            const _self = this;
+            const view = this.$store.getters._getDefaultView;
+
+            const resultLayer = view.map.findLayerById('GeoJSON');
+
+            if (resultLayer) {
+                const queryParams = resultLayer.createQuery();
+                // queryParams.geometry = extentForRegionOfInterest;改  queryPoint.geometry = graphic.geometry; //赋值操作，query与业务图层绑定
+                queryParams.where = queryParams.where;
+                // + " AND TYPE = 'Extreme'";
+
+                // query the layer with the modified params object
+                resultLayer.queryFeatures(queryParams).then(function (results) {
+                    // prints the array of result graphics to the console
+                    console.log(results.features);
+                });
+                // ////view.on('click', function (event) {
+                //     view.hitTest(event).then(function (response) {
+                //         console.log('1', response);
+                //         //所有添加在地图上的图层都会继承这个动作，所以需要选择图层
+                //         let graphic = [];
+                //         if (response.results.length) {
+                //             graphic = response.results.filter(function (result) {
+                //                 return result.graphic.layer.id === 'GeoJSON';
+                //                 //实际项目中每个图层的layderid都是指定的/有命名规则的，不全是‘layerid:layerid’
+                //             })[0].graphic;
+                //         }
+                //         console.log(graphic.attributes); //筛选图层的属性数据信息
+                //         //之后的操作：
+                //         //queryTask进行查询得到该图层选定元素的全部信息:完整sql（where+属性信息）
+                //         //div+前端弹窗
+                //     });
+                // ////});
+            } else {
+                _self.$message({
+                    message: '请添加业务图层',
+                    type: 'warning',
+                });
+            }
+        },
+*/
+        MyhandleCommand(command) {
+            switch (command) {
+                case 'showRardaData':
+                    this.initRadarData();
+                    break;
+                case 'area':
+                    this.initAreaMap();
+                    break;
+                case 'MyArea':
+                    this.initDIYmeasure('area');
+                    break;
+                case 'printmap':
+                    this.PrintMap();
+                    break;
+                // case 'openPonitPopup':
+                //     this.openPointJSONPopup();
+                //     break;//①
+                case 'openPopup':
+                    this.openMapPopup(); //这里
+
+                    break;
+                default:
+                    break;
+            }
+        },
+        async initRadarData() {
+            const _self = this;
+            const view = this.$store.getters._getDefaultView;
+            const [GeoJSONLayer] = await loadModules(['esri/layers/GeoJSONLayer'], config.options);
+            /*const renderer = {
+                type: 'simple',
+                field: 'WaveHs',
+                symbol: {
+                    type: 'simple-marker',
+                    color: 'orange',
+                    outline: {
+                        color: 'white',
+                    },
+                },
+                visualVariables: [
+                    {
+                        type: 'size', //color (浪高数值越大，颜色越红)
+                        field: 'WaveHs',
+                        stops: [
+                            {
+                                value: 2.5,
+                                size: '4px',
+                            },
+                            {
+                                value: 8,
+                                size: '40px',
+                            },
+                        ],
+                    },
+                ],
+            };*/
+
+            const referenceScale = 9244650;
+
+            const renderer = {
+                type: 'simple', // autocasts as new SimpleRenderer()
+                symbol: {
+                    type: 'simple-marker', // autocasts as new SimpleMarkerSymbol()
+                    // Arrow marker
+                    path: 'M14.5,29 23.5,0 14.5,9 5.5,0z', // The SVG path of the icon.
+                    color: [250, 250, 250],
+                    outline: {
+                        color: [255, 255, 255, 0.5],
+                        width: 0.5,
+                    },
+                    angle: 180,
+                    size: 15,
+                },
+                visualVariables: [
+                    {
+                        type: 'rotation',
+                        field: 'WindDir',
+                        rotationType: 'geographic', //这估计要改
+                    },
+                    /*  {
+                        type: 'size',
+                        field: 'WindVelocity',
+                        minDataValue: 0,
+                        // maxDataValue: 35,
+                        minSize: {
+                            type: 'size',
+                            valueExpression: view.scale,
+                            // adjust the min size by scale
+                            stops: [
+                                { value: referenceScale, size: 8 },
+                                { value: referenceScale * 2, size: 6 },
+                                { value: referenceScale * 4, size: 4 },
+                                { value: referenceScale * 8, size: 2 },
+                            ],
+                        },
+                        maxSize: {
+                            type: 'size',
+                            valueExpression: view.scale,
+                            // adjust the max size by scale
+                            stops: [
+                                { value: referenceScale, size: 40 },
+                                { value: referenceScale * 2, size: 30 },
+                                { value: referenceScale * 4, size: 20 },
+                                { value: referenceScale * 8, size: 10 },
+                            ],
+                        }, 
+                    },*/
+                    // {
+                    //     type: 'color',
+                    //     field:'WaveHs',
+                    //     stops: [
+                    //         { value: 0.1, color: '#2b83ba' },
+                    //         { value: 0.5, color: '#abdda4' },
+                    //         { value: 1.25, color: '#ffffbf' },
+                    //         { value: 2.5, color: '#fdae61' },
+                    //         { value: 4, color: '#d7191c' },
+                    //         { value: 14, color: '#ffffff' },
+                    //     ],
+                    // },
+                    {
+                        type: 'color',
+                        field: 'WindVelocity',
+                        stops: [
+                            { value: 1.6, color: '#2b83ba' },
+                            { value: 5.5, color: '#abdda4' },
+                            { value: 8.0, color: '#ffffbf' },
+                            { value: 13.9, color: '#fdae61' },
+                            { value: 20.8, color: '#d7191c' },
+                            { value: 30, color: '#ffffff' },
+                        ],
+                    },
+                ],
+            };
+
+            /*  const template = {
+                title: 'Earthquake Info',
+                content: 'Magnitude {mag} {type} hit {place} on {time}',
+                // fieldInfos: [
+                //     {
+                //         fieldName: 'time',
+                //         format: {
+                //             dateFormat: 'short-date-short-time',
+                //         },
+                //     },
+                // ],
+            }; */
+            let template = {
+                title: '{coordinates}详细信息',
+                content: [
+                    {
+                        type: 'fields',
+                        fieldInfos: [
+                            {
+                                fieldName: 'WaveHs',
+                                label: '浪高',
+                            },
+                            {
+                                fieldName: 'WaveDir',
+                                label: '浪向',
+                            },
+                            {
+                                fieldName: 'WaveCredit',
+                                label: '置信度',
+                            },
+                            {
+                                fieldName: 'WindVelocity',
+                                label: '风速',
+                            },
+                            {
+                                fieldName: 'WindDir',
+                                label: '风向',
+                            },
+                            {
+                                fieldName: 'WindDir',
+                                label: '风向',
+                            },
+                            {
+                                fieldName: 'WindFetch',
+                                label: '风区',
+                            },
+                            {
+                                fieldName: 'Current',
+                                label: '流速',
+                            },
+                            {
+                                fieldName: 'CurDirection',
+                                label: '流向',
+                            },
+                            {
+                                fieldName: 'CurCredit',
+                                label: '置信度（流）',
+                            },
+                        ],
+                    },
+                ],
+            };
+            const url = 'http://localhost:80/vuegis/static/data/2021-09-12/GeoData2021-09-12-00-10.json';
+            const geojsonLayer = new GeoJSONLayer({
+                id: 'GeoJSON',
+                url: url,
+                popupTemplate: template,
+                renderer: renderer,
+            });
+            view.map.add(geojsonLayer);
+            geojsonLayer.on('update-end', function (e) {
+                view.map.setExtent(e.target.extent.expand(1.2));
+            });
+        },
         handleCommand(command) {
             switch (command) {
                 case 'distance':
@@ -327,8 +588,12 @@ export default {
                 case 'printmap':
                     this.PrintMap();
                     break;
+                // case 'openPonitPopup':
+                //     this.openPointJSONPopup();
+                //     break;//①
                 case 'openPopup':
                     this.openMapPopup(); //这里
+
                     break;
                 default:
                     break;
@@ -568,7 +833,7 @@ export default {
     position: absolute;
     padding: 0 15px;
     /* width: 370px; */
-    width: 400px;
+    width: 470px;
     height: 30px;
     /* background-color: #67c23a45; */
     background-color: #666e75;
